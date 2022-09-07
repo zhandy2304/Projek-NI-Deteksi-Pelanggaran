@@ -7,8 +7,8 @@ from datetime import datetime
 import os
 import mysql.connector
 
-cascade_src = "bike.xml"
-bike_cascade = cv2.CascadeClassifier(cascade_src)
+# cascade_src = "bike.xml"
+# bike_cascade = cv2.CascadeClassifier(cascade_src)
 
 # buka koneksi
 mysql = mysql.connector.connect(user='root', 
@@ -121,8 +121,8 @@ while(cap.isOpened()):
     #Binariazcion to eliminate shadows (gray color)
     try:
         #for motorcycle
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        bike = bike_cascade.detectMultiScale(gray,1.01, 1)
+        # gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        # bike = bike_cascade.detectMultiScale(gray,1.01, 1)
         #blur=cv2.GaussianBlur(gray,(3,3),5)
 
         #for cars
@@ -297,4 +297,4 @@ print ('MELAWAN ARUS:',cnt_down)
 # print ('KENDARAAN BERMOTOR:',motor)
 
 #IP 192.168.1.128
-# password admin123
+#password admin123
