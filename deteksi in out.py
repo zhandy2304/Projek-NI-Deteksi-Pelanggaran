@@ -28,7 +28,8 @@ email_password = 'smrkshocnlsqhsil'
 email_receiver = 'ahmadzdy230401@gmail.com'
 
 # Set the subject and body of the email
-subject = 'Check out my new video!'
+subject = 'Terjadi Pelanggaran di Jalan Toll !!'
+
 body = """
 Telah terjadi Pelanggaran Lalu Lintas!!!
 
