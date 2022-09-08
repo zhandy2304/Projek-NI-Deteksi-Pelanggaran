@@ -24,7 +24,7 @@ mysqlCursor = mysql.cursor();
 
 # Define email sender and receiver
 email_sender = 'surianty269@gmail.com'
-email_password = 'smrkshocnlsqhsil'
+email_password = ''
 email_receiver = 'ahmadzdy230401@gmail.com'
 
 # Set the subject and body of the email
@@ -42,6 +42,11 @@ em['To'] = email_receiver
 em['Subject'] = subject
 em.set_content(body)
 
+s = smtplib.SMTP('smtp.gmail.com')
+# start TLS for security
+s.starttls()
+s.login(email_sender, email_password)
+
 # Add SSL (layer of security)
 context = ssl.create_default_context()
 
@@ -54,7 +59,7 @@ motor = 0
 
 #Video source
 #cap = cv2.VideoCapture(0)
-cap = cv2.VideoCapture('rtsp://admin:dcttotal2019@36.67.188.241:558/LiveChannel/4/media.smp')
+cap = cv2.VideoCapture('rtsp://admin:admin123@192.168.22.8/live1s3.sdp')
 cap.set(cv2.CAP_PROP_BUFFERSIZE, 10)
 
 #Properties of the video
@@ -227,10 +232,8 @@ while(cap.isOpened()):
                             # mengeksekusi commit biar permanen
                             mysql.commit()
 
-                            # Log in and send the email
-                            with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
-                                smtp.login(email_sender, email_password)
-                                smtp.sendmail(email_sender, email_receiver, em.as_string())
+                            # Log in and send the email   
+                            s.sendmail(email_sender, email_receiver, em.as_string())
                         break
 
                     if i.getState() == '1':
