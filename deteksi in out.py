@@ -7,6 +7,7 @@ from datetime import datetime
 import os
 import mysql.connector
 
+# deklarasi cascade untuk motor
 # cascade_src = "bike.xml"
 # bike_cascade = cv2.CascadeClassifier(cascade_src)
 
