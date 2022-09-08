@@ -6,6 +6,9 @@ import time
 from datetime import datetime
 import os
 import mysql.connector
+import smtplib
+import ssl
+from email.message import EmailMessage
 
 # deklarasi cascade untuk motor
 # cascade_src = "bike.xml"
@@ -18,6 +21,28 @@ mysql = mysql.connector.connect(user='root',
                                 database='jalan_toll');
 
 mysqlCursor = mysql.cursor();
+
+# Define email sender and receiver
+email_sender = 'surianty269@gmail.com'
+email_password = 'smrkshocnlsqhsil'
+email_receiver = 'ahmadzdy230401@gmail.com'
+
+# Set the subject and body of the email
+subject = 'Check out my new video!'
+body = """
+Telah terjadi Pelanggaran Lalu Lintas!!!
+
+MOHON SEGERA DI TINDAK
+"""
+
+em = EmailMessage()
+em['From'] = email_sender
+em['To'] = email_receiver
+em['Subject'] = subject
+em.set_content(body)
+
+# Add SSL (layer of security)
+context = ssl.create_default_context()
 
 
 # Input and output counters
@@ -200,6 +225,11 @@ while(cap.isOpened()):
 
                             # mengeksekusi commit biar permanen
                             mysql.commit()
+
+                            # Log in and send the email
+                            with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
+                                smtp.login(email_sender, email_password)
+                                smtp.sendmail(email_sender, email_receiver, em.as_string())
                         break
 
                     if i.getState() == '1':
