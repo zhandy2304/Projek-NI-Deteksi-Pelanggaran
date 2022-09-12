@@ -59,7 +59,7 @@ motor = 0
 
 #Video source
 #cap = cv2.VideoCapture(0)
-# CCTV yang digunakan adalah CCTV OffRampp RAPPOKALLING
+# CCTV yang digunakan adalah CCTV OffRamp RAPPOKALLING
 cap = cv2.VideoCapture('rtsp://admin:admin123@192.168.22.12/live1s3.sdp')
 cap.set(cv2.CAP_PROP_BUFFERSIZE, 10)
 
