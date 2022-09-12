@@ -50,10 +50,10 @@ class MyCar:
                 return False
         else:
             return False
-    def going_DOWN(self,mid_start,mid_end):
+    def going_DOWN(self,mid_start,a,mid_end,b):
         if len(self.tracks) >= 2:
             if self.state == '0':
-                if self.tracks[-1][1] > mid_start and self.tracks[-2][1] <= mid_start: #cruzo la linea
+                if self.tracks[-1][1] > mid_start and self.tracks[-1][-2] < a and self.tracks[-2][1] <= mid_start: #cruzo la linea
                     state = '1'
                     self.dir = 'down'
                     return True
