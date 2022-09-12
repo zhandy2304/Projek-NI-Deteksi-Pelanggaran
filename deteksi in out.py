@@ -23,9 +23,9 @@ mysql = mysql.connector.connect(user='root',
 mysqlCursor = mysql.cursor();
 
 # Define email sender and receiver
-email_sender = 'surianty269@gmail.com'
-email_password = ''
-email_receiver = 'ahmadzdy230401@gmail.com'
+email_sender = 'cctvtollmakassar@gmail.com' #email pengirim dan password
+email_password = 'ythmtshzyeljqlnn'
+email_receiver = 'ahmadzdy230401@gmail.com' #email penerima
 
 # Set the subject and body of the email
 subject = 'Terjadi Pelanggaran di Jalan Toll !!'
@@ -59,7 +59,7 @@ motor = 0
 
 #Video source
 #cap = cv2.VideoCapture(0)
-cap = cv2.VideoCapture('rtsp://admin:admin123@192.168.22.8/live1s3.sdp')
+cap = cv2.VideoCapture('rtsp://admin:admin123@192.168.22.12/live1s3.sdp')
 cap.set(cv2.CAP_PROP_BUFFERSIZE, 10)
 
 #Properties of the video
@@ -77,11 +77,17 @@ areaTH = frameArea/750
 print ('Area Threshold', areaTH)
 
 #In / out lines
-line_up = int(4.5*(h/7))
-line_down   = int(5*(h/7))
+# line_up = int(4.5*(h/7))
+# line_down   = int(5*(h/7))
 
-up_limit =   int(4*(h/7))
-down_limit = int(5.5*(h/7))
+# up_limit =   int(4*(h/7))
+# down_limit = int(5.5*(h/7))
+
+line_up = int(3.3*(h/7))
+line_down   = int(3.5*(h/7))
+
+up_limit =   int(2.7*(h/7))
+down_limit = int(4*(h/7))
 
 print ("Red line y:",str(line_down))
 print ("Blue line y:", str(line_up))
@@ -89,22 +95,24 @@ line_down_color = (255,0,0)
 line_up_color = (210, 232, 16)
 
 pt1 =  [0, line_down];
-pt2 =  [w, line_down];
+pt2 =  [250, line_down];
 pts_L1 = np.array([pt1,pt2], np.int32)
+pts_L1s = np.array([pt1,pt2], np.int32)
 pts_L1 = pts_L1.reshape((-1,1,2))
 
 pt3 =  [0, line_up];
-pt4 =  [w, line_up];
+pt4 =  [250, line_up];
 pts_L2 = np.array([pt3,pt4], np.int32)
+pts_L2s = np.array([pt3,pt4], np.int32)
 pts_L2 = pts_L2.reshape((-1,1,2))
 
 pt5 =  [0, up_limit];
-pt6 =  [w, up_limit];
+pt6 =  [250, up_limit];
 pts_L3 = np.array([pt5,pt6], np.int32)
 pts_L3 = pts_L3.reshape((-1,1,2))
 
 pt7 =  [0, down_limit];
-pt8 =  [w, down_limit];
+pt8 =  [250, down_limit];
 pts_L4 = np.array([pt7,pt8], np.int32)
 pts_L4 = pts_L4.reshape((-1,1,2))
 
@@ -205,7 +213,7 @@ while(cap.isOpened()):
                             # cv2.imwrite("patuh\patuh" + str(cnt_up) + ".png", image)
 
                         # Jika kendaraan melawan arah (dari arah depan ke belakang)
-                        if i.going_DOWN(line_down,line_up) == True:
+                        if i.going_DOWN(line_down,250,line_up,250) == True:
                             cnt_down += 1;
                             pelanggaran += 1;
                             curr_datetime = datetime.now().strftime('%Y-%m-%d %H-%M-%S')
@@ -232,7 +240,7 @@ while(cap.isOpened()):
                             # mengeksekusi commit biar permanen
                             mysql.commit()
 
-                            # Log in and send the email   
+                            # Mengirimkan email
                             s.sendmail(email_sender, email_receiver, em.as_string())
                         break
 
@@ -283,9 +291,9 @@ while(cap.isOpened()):
                 #     #     bike.pop(index)
                 #     #     del i
 
-            # cv2.circle(frame,(cx,cy), 5, (0,0,255), -1)
-            # img = cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,0),2)            
-            #cv2.drawContours(frame, cnt, -1, (0,255,0), 3)
+            cv2.circle(frame,(cx,cy), 5, (0,0,255), -1)
+            img = cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,0),2)            
+            cv2.drawContours(frame, cnt, -1, (0,255,0), 3)
     #END for cnt in contours0
     for i in cars:
 ##        if len(i.getTracks()) >= 2:
