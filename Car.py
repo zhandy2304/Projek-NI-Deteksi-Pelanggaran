@@ -50,6 +50,8 @@ class MyCar:
                 return False
         else:
             return False
+    
+    #Function untuk menentukan melawan arah
     def going_DOWN(self,mid_start,a,mid_end,b):
         if len(self.tracks) >= 2:
             if self.state == '0':
