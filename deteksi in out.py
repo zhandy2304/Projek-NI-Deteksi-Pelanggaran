@@ -1,3 +1,6 @@
+# from curses import window
+# from tkinter import Image
+# from turtle import title
 import numpy as np
 import cv2
 import Car
@@ -9,6 +12,9 @@ import mysql.connector
 import smtplib
 import ssl
 from email.message import EmailMessage
+import imghdr
+import pygetwindow
+from PIL import Image
 
 # deklarasi cascade untuk motor
 # cascade_src = "bike.xml"
@@ -21,6 +27,10 @@ mysql = mysql.connector.connect(user='root',
                                 database='jalan_toll');
 
 mysqlCursor = mysql.cursor();
+
+# Untuk getscreenshoot untuk spesific windows.
+# Dilakukan terlebih dahulu pencarian nama windows yang sedang terbuka
+title = pygetwindow.getAllTitles()
 
 # Define email sender and receiver
 email_sender = 'cctvtollmakassar@gmail.com' #email pengirim dan password
@@ -50,7 +60,6 @@ s.login(email_sender, email_password)
 # Add SSL (layer of security)
 context = ssl.create_default_context()
 
-
 # Input and output counters
 cnt_up   = 0
 cnt_down = 0
@@ -58,10 +67,10 @@ pelanggaran = 0
 motor = 0
 
 #Video source
-#cap = cv2.VideoCapture(0)
+# cap = cv2.VideoCapture(0)
 # CCTV yang digunakan adalah CCTV OffRamp RAPPOKALLING
 cap = cv2.VideoCapture('rtsp://admin:admin123@192.168.22.12/live1s3.sdp')
-cap.set(cv2.CAP_PROP_BUFFERSIZE, 10)
+#cap.set(cv2.CAP_PROP_BUFFERSIZE, 10)
 
 #Properties of the video
 ##cap.set(3,160) #Width
@@ -84,11 +93,11 @@ print ('Area Threshold', areaTH)
 # up_limit =   int(4*(h/7))
 # down_limit = int(5.5*(h/7))
 
-line_up = int(3.3*(h/7))
-line_down   = int(3.5*(h/7))
+line_up = int(3.1*(h/7))
+line_down = int(3.3*(h/7))
 
-up_limit =   int(2.7*(h/7))
-down_limit = int(4*(h/7))
+up_limit =   int(2.5*(h/7))
+down_limit = int(3.8*(h/7))
 
 print ("Red line y:",str(line_down))
 print ("Blue line y:", str(line_up))
@@ -96,24 +105,22 @@ line_down_color = (255,0,0)
 line_up_color = (210, 232, 16)
 
 pt1 =  [0, line_down];
-pt2 =  [250, line_down];
+pt2 =  [200, int(3.8*(h/7))];
 pts_L1 = np.array([pt1,pt2], np.int32)
-pts_L1s = np.array([pt1,pt2], np.int32)
 pts_L1 = pts_L1.reshape((-1,1,2))
 
 pt3 =  [0, line_up];
-pt4 =  [250, line_up];
+pt4 =  [210, int(3.6*(h/7))];
 pts_L2 = np.array([pt3,pt4], np.int32)
-pts_L2s = np.array([pt3,pt4], np.int32)
 pts_L2 = pts_L2.reshape((-1,1,2))
 
 pt5 =  [0, up_limit];
-pt6 =  [250, up_limit];
+pt6 =  [270, int(3*(h/7))];
 pts_L3 = np.array([pt5,pt6], np.int32)
 pts_L3 = pts_L3.reshape((-1,1,2))
 
 pt7 =  [0, down_limit];
-pt8 =  [250, down_limit];
+pt8 =  [150, int(4.3*(h/7))];
 pts_L4 = np.array([pt7,pt8], np.int32)
 pts_L4 = pts_L4.reshape((-1,1,2))
 
@@ -214,7 +221,7 @@ while(cap.isOpened()):
                             # cv2.imwrite("patuh\patuh" + str(cnt_up) + ".png", image)
 
                         # Jika kendaraan melawan arah (dari arah depan ke belakang)
-                        if i.going_DOWN(line_down,250,line_up,250) == True:
+                        if i.going_DOWN(line_down,210,line_up,210) == True:
                             cnt_down += 1;
                             pelanggaran += 1;
                             curr_datetime = datetime.now().strftime('%Y-%m-%d %H-%M-%S')
@@ -222,13 +229,29 @@ while(cap.isOpened()):
                             idkendaraan = i.getId()
                             print ("ID:",i.getId(),'MELAKUKAN PELANGGARAN',waktu)
 
+                            window = pygetwindow.getWindowsWithTitle('Frame')[0]
+                            left, top = window.topleft
+                            right, bottom = window.bottomright
+
                             cv2.circle(frame,(cx,cy), 5, (0,255,0), -1)
                             img = cv2.rectangle(frame,(x,y),(x+w,y+h),(0,0,255),2) 
+                            path = "pelanggaran/melawanarus - " + str(cnt_down) + "-" + str(curr_datetime) +".png"
+
 
                             # untuk screenshoot
-                            image = pyautogui.screenshot()
-                            image = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
-                            cv2.imwrite("pelanggaran\melawanarus - " + str(cnt_down) + "-" + str(curr_datetime) +".png", image)
+                            pyautogui.screenshot(path)
+                            im = Image.open(path)
+                            im = im.crop((left, top, right, bottom))
+                            im.save(path)
+
+                            # image = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
+                            # cv2.imwrite("pelanggaran/melawanarus - " + str(cnt_down) + "-" + str(curr_datetime) +".png", image)
+
+                            with open("pelanggaran/melawanarus - " + str(cnt_down) + "-" + str(curr_datetime) +".png",'rb') as f:
+                                image_data = f.read()
+                                image_type = imghdr.what(f.name)
+                                image_name = f.name
+                            em.add_attachment(image_data, maintype='image', subtype=image_type, filename=image_name)
 
                             # membuat query untuk insert data ke mysql
                             sql = "INSERT INTO data_pelanggaran(ID_KENDARAAN, JENIS_PELANGGARAN, WAKTU) VALUES ('"+str(idkendaraan)+"', 'Melawan Arus', now())";
@@ -293,8 +316,8 @@ while(cap.isOpened()):
                 #     #     del i
 
             cv2.circle(frame,(cx,cy), 5, (0,0,255), -1)
-            img = cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,0),2)            
-            cv2.drawContours(frame, cnt, -1, (0,255,0), 3)
+            img = cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,0),1)            
+            # cv2.drawContours(frame, cnt, -1, (0,255,0), 3)
     #END for cnt in contours0
     for i in cars:
 ##        if len(i.getTracks()) >= 2:
