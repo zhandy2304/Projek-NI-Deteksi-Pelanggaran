@@ -29,5 +29,6 @@ def home() :
     # labels = [row[0] for row in data]
     # values = [row[1] for row in data]
 
+    # Untuk menjalankan file php
     out = sp.run(["php", "index.php"], stdout=sp.PIPE)
     return out.stdout
