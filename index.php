@@ -194,6 +194,8 @@
     <script src="https://demos.creative-tim.com/soft-ui-dashboard/assets/js/plugins/Chart.extension.js"></script>
     <script src="https://demos.creative-tim.com/soft-ui-dashboard/assets/js/soft-ui-dashboard.min.js?v=1.0.2"></script>
     <?php 
+
+    // koneksi ke database
     $conn = new mysqli('localhost', 'root', '', 'jalan_toll');
     $query = $conn->query("
     SELECT
