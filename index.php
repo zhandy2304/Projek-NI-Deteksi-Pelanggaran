@@ -22,7 +22,10 @@
                                 <a href="data_traffic"><h7>Data Traffic Lalu Lintas</h6></a>
                             </li>
                         </ul>
-                        <hr width="2dp">
+                    </div>
+                    <div class="col-lg-5"></div>
+                    <div class="col-lg-1">
+                    <button onclick=refreshPage() type="button" class="btn btn-warning float-right ml-2">Refresh</button>
                     </div>
                 </div>
             </div>
@@ -193,6 +196,13 @@
     <script src="https://demos.creative-tim.com/soft-ui-dashboard/assets/js/plugins/chartjs.min.js"></script>
     <script src="https://demos.creative-tim.com/soft-ui-dashboard/assets/js/plugins/Chart.extension.js"></script>
     <script src="https://demos.creative-tim.com/soft-ui-dashboard/assets/js/soft-ui-dashboard.min.js?v=1.0.2"></script>
+    
+    <script>
+    function refreshPage(){
+    window.location.reload();
+    }
+    </script>
+
     <?php 
 
     // koneksi ke database
