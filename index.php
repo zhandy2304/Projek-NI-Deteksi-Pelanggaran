@@ -8,6 +8,24 @@
     <link rel="stylesheet" href="https://demos.creative-tim.com/soft-ui-dashboard/assets/css/soft-ui-dashboard.min.css?v=1.0.2">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
     <link rel="stylesheet" href="./assets/css/loopple/loopple.css">
+    <style>
+      .chartjs-table, th, td{
+
+        border-collapse : collapse;
+        border: 1px solid #67748E;
+        padding: 10px;
+        margin-left:20px;
+        font-size:12px;
+      }
+
+      .chartjs-thead {
+        font-weight : bold; 
+      }
+
+      .chartjs-body {
+        text-align : center;
+      }
+    </style>
 </head>
 
 <body class="g-sidenav-show">
@@ -71,7 +89,7 @@
                     </p>
                 </div>
                 <div class="card-body p-3">
-                    <div class="chart">
+                    <div class="chart1">
                         <div class="chartjs-size-monitor">
                             <div class="chartjs-size-monitor-expand">
                                 <div class=""></div>
@@ -104,7 +122,7 @@
                             </p>
                         </div>
                         <div class="card-body p-3">
-                            <div class="chart">
+                            <div class="chart2">
                                 <div class="chartjs-size-monitor">
                                     <div class="chartjs-size-monitor-expand">
                                         <div class=""></div>
@@ -136,7 +154,7 @@
                             </p>
                         </div>
                         <div class="card-body p-3">
-                            <div class="chart">
+                            <div class="chart3">
                                 <div class="chartjs-size-monitor">
                                     <div class="chartjs-size-monitor-expand">
                                         <div class=""></div>
@@ -261,9 +279,7 @@
            	gradientStroke2.addColorStop(1, "rgba(20,23,39,0.2)");
            	gradientStroke2.addColorStop(0.2, "rgba(72,72,176,0.0)");
            	gradientStroke2.addColorStop(0, "rgba(20,23,39,0)");
-           	new Chart(ctx2, {
-              type: "line",
-              data: {
+            const data = {
                 labels: <?php echo json_encode($jam_yesterday) ?>,
                 datasets: [{
                     label: "Hari ini",
@@ -289,10 +305,13 @@
                     maxBarThickness: 6
                   },
                 ],
-              },
+              }
+           	new Chart(ctx2, {
+              type: "line",
+              data,
               options: {
                 responsive: true,
-                maintainAspectRatio: false,
+                maintainAspectRatio: true,
                 plugins: {
                   legend: {
                     display: false,
@@ -345,7 +364,48 @@
                   },
                 },
               },
-            }); 
+            });
+            function createTable(){
+              console.log('triggered');
+              const chart = document.querySelector('.chart');
+              const tableDiv = document.createElement('DIV');
+              tableDiv.setAttribute('id', 'tableDiv'); //menambahkan ID
+
+              const table = document.createElement('TABLE');
+              table.classList.add('chartjs-table');
+
+              // add table head (thead)
+              const thead = table.createTHead();
+              thead.classList.add('chartjs-thead');
+
+              thead.insertRow(0);
+              console.log(data.labels)
+              for(let i = 0; i < data.labels.length; i++) {
+                thead.rows[0].insertCell(i).innerText = data.labels[i];
+                
+              };
+              thead.rows[0].insertCell(0).innerText = 'Tanggal'
+
+              // add table body
+              const tbody = table.createTBody();
+              thead.classList.add('chartjs-tbody');
+              console.log(data.datasets)
+              data.datasets.map((dataset,index) => {
+                tbody.insertRow(index);
+                for(let i = 0; i < data.datasets[0].data.length; i++){
+                  tbody.rows[index].insertCell(i).innerText = dataset.data[i];
+                };
+                tbody.rows[index].insertCell(0).innerText = dataset.label;
+              })
+
+              
+              // append
+              chart.appendChild(tableDiv);
+              tableDiv.appendChild(table);
+              }
+
+              createTable();
+
            };
 
            if (document.querySelector("#chart-line4")) {
@@ -358,9 +418,7 @@
            	gradientStroke2.addColorStop(1, "rgba(20,23,39,0.2)");
            	gradientStroke2.addColorStop(0.2, "rgba(72,72,176,0.0)");
            	gradientStroke2.addColorStop(0, "rgba(20,23,39,0)");
-           	new Chart(ctx2, {
-              type: "line",
-              data: {
+            const data = {
                 labels: <?php echo json_encode($day_bulanan) ?>,
                 datasets: [{
                     label: "Pelanggaran",
@@ -376,10 +434,13 @@
         
                   },
                 ],
-              },
+              }
+           	new Chart(ctx2, {
+              type: "line",
+              data,
               options: {
                 responsive: true,
-                maintainAspectRatio: false,
+                maintainAspectRatio: true,
                 plugins: {
                   legend: {
                     display: false,
@@ -432,7 +493,47 @@
                   },
                 },
               },
-            }); 
+            });
+            function createTable(){
+              console.log('triggered');
+              const chart = document.querySelector('.chart1');
+              const tableDiv = document.createElement('DIV');
+              tableDiv.setAttribute('id', 'tableDiv'); //menambahkan ID
+
+              const table = document.createElement('TABLE');
+              table.classList.add('chartjs-table');
+
+              // add table head (thead)
+              const thead = table.createTHead();
+              thead.classList.add('chartjs-thead');
+
+              thead.insertRow(0);
+              console.log(data.labels)
+              for(let i = 0; i < data.labels.length; i++) {
+                thead.rows[0].insertCell(i).innerText = data.labels[i];
+                
+              };
+              thead.rows[0].insertCell(0).innerText = 'Tanggal'
+
+              // add table body
+              const tbody = table.createTBody();
+              thead.classList.add('chartjs-tbody');
+              console.log(data.datasets)
+              data.datasets.map((dataset,index) => {
+                tbody.insertRow(index);
+                for(let i = 0; i < data.datasets[0].data.length; i++){
+                  tbody.rows[index].insertCell(i).innerText = dataset.data[i];
+                };
+                tbody.rows[index].insertCell(0).innerText = dataset.label;
+              })
+
+              
+              // append
+              chart.appendChild(tableDiv);
+              tableDiv.appendChild(table);
+              }
+
+              createTable();
            };
 
            if (document.querySelector("#chart-line1")) {
@@ -445,9 +546,7 @@
            	gradientStroke2.addColorStop(1, "rgba(20,23,39,0.2)");
            	gradientStroke2.addColorStop(0.2, "rgba(72,72,176,0.0)");
            	gradientStroke2.addColorStop(0, "rgba(20,23,39,0)");
-           	new Chart(ctx2, {
-              type: "line",
-              data: {
+            const data = {
                 labels: <?php echo json_encode($jam) ?>,
                 datasets: [{
                     label: "Pelanggaran",
@@ -463,10 +562,13 @@
         
                   },
                 ],
-              },
+              }
+           	new Chart(ctx2, {
+              type: "line",
+              data,
               options: {
                 responsive: true,
-                maintainAspectRatio: false,
+                maintainAspectRatio: true,
                 plugins: {
                   legend: {
                     display: false,
@@ -519,7 +621,47 @@
                   },
                 },
               },
-            }); 
+            });
+            function createTable(){
+              console.log('triggered');
+              const chart = document.querySelector('.chart2');
+              const tableDiv = document.createElement('DIV');
+              tableDiv.setAttribute('id', 'tableDiv'); //menambahkan ID
+
+              const table = document.createElement('TABLE');
+              table.classList.add('chartjs-table');
+
+              // add table head (thead)
+              const thead = table.createTHead();
+              thead.classList.add('chartjs-thead');
+
+              thead.insertRow(0);
+              console.log(data.labels)
+              for(let i = 0; i < data.labels.length; i++) {
+                thead.rows[0].insertCell(i).innerText = data.labels[i];
+                
+              };
+              thead.rows[0].insertCell(0).innerText = 'Tanggal'
+
+              // add table body
+              const tbody = table.createTBody();
+              thead.classList.add('chartjs-tbody');
+              console.log(data.datasets)
+              data.datasets.map((dataset,index) => {
+                tbody.insertRow(index);
+                for(let i = 0; i < data.datasets[0].data.length; i++){
+                  tbody.rows[index].insertCell(i).innerText = dataset.data[i];
+                };
+                tbody.rows[index].insertCell(0).innerText = dataset.label;
+              })
+
+              
+              // append
+              chart.appendChild(tableDiv);
+              tableDiv.appendChild(table);
+              }
+
+              createTable();
            };
 
            if (document.querySelector("#chart-line2")) {
@@ -532,9 +674,7 @@
            	gradientStroke2.addColorStop(1, "rgba(20,23,39,0.2)");
            	gradientStroke2.addColorStop(0.2, "rgba(72,72,176,0.0)");
            	gradientStroke2.addColorStop(0, "rgba(20,23,39,0)");
-           	new Chart(ctx2, {
-              type: "line",
-              data: {
+            const data = {
                 labels: <?php echo json_encode($jam_yesterday) ?>,
                 datasets: [{
                     label: "Pelanggaran",
@@ -550,10 +690,13 @@
         
                   },
                 ],
-              },
+              }
+           	new Chart(ctx2, {
+              type: "line",
+              data,
               options: {
                 responsive: true,
-                maintainAspectRatio: false,
+                maintainAspectRatio: true,
                 plugins: {
                   legend: {
                     display: false,
@@ -606,7 +749,47 @@
                   },
                 },
               },
-            }); 
+            });
+            function createTable(){
+              console.log('triggered');
+              const chart = document.querySelector('.chart3');
+              const tableDiv = document.createElement('DIV');
+              tableDiv.setAttribute('id', 'tableDiv'); //menambahkan ID
+
+              const table = document.createElement('TABLE');
+              table.classList.add('chartjs-table');
+
+              // add table head (thead)
+              const thead = table.createTHead();
+              thead.classList.add('chartjs-thead');
+
+              thead.insertRow(0);
+              console.log(data.labels)
+              for(let i = 0; i < data.labels.length; i++) {
+                thead.rows[0].insertCell(i).innerText = data.labels[i];
+                
+              };
+              thead.rows[0].insertCell(0).innerText = 'Tanggal'
+
+              // add table body
+              const tbody = table.createTBody();
+              thead.classList.add('chartjs-tbody');
+              console.log(data.datasets)
+              data.datasets.map((dataset,index) => {
+                tbody.insertRow(index);
+                for(let i = 0; i < data.datasets[0].data.length; i++){
+                  tbody.rows[index].insertCell(i).innerText = dataset.data[i];
+                };
+                tbody.rows[index].insertCell(0).innerText = dataset.label;
+              })
+
+              
+              // append
+              chart.appendChild(tableDiv);
+              tableDiv.appendChild(table);
+              }
+
+              createTable();
            };
     </script>
     <script src="./assets/js/loopple/loopple.js"></script>
