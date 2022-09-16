@@ -22,8 +22,12 @@
                                 <a href="javascript:;"><h7 class="font-weight-bolder mb-0">Data Traffic Lalu Lintas</h6></a>
                             </li>
                         </ul>
-                        <hr width="2dp">
-                    </div>
+                      </div>
+                      <div class="col-lg-5"></div>
+                      <div class="col-lg-1">
+                        <button onclick=refreshPage() type="button" class="btn btn-warning float-right ml-2">Refresh</button>
+                      </div>
+                    
                 </div>
             </div>
     
